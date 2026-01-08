@@ -12,7 +12,7 @@ const Homepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative">
+    <div className="relative bg-[#E8DCC2]">
       {/* ENTIRE PAGE WRAPPER THAT WILL BLUR */}
       <motion.div
         animate={{
