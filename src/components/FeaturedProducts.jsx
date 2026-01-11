@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, ShoppingBag } from "lucide-react";
+import { Plus, ShoppingBag, ArrowRight } from "lucide-react";
 
 const featured = [
   {
@@ -48,7 +48,7 @@ const featured = [
 
 const FeaturedProducts = () => {
   return (
-    <section className="bg-white py-24">
+    <section className="py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Section Header */}
@@ -60,18 +60,18 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Wrapped Grid Layout */}
-        <div className="flex flex-wrap -mx-4">
+        <div className="md:flex md:flex-wrap grid grid-cols-2 -mx-4">
           {featured.map((product) => (
             <div 
               key={product.id} 
               className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-16 group"
             >
               {/* Image Container */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-stone-50">
+              <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 rounded-t-[20rem]">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-all duration-[1.2s] ease-out group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0"
+                  className="w-full h-full object-cover transition-all duration-[1.2s]  ease-out group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0"
                 />
                 
                 {/* Minimalist Quick Add Overlay */}
@@ -83,7 +83,7 @@ const FeaturedProducts = () => {
               </div>
 
               {/* Product Info */}
-              <div className="mt-8 text-center px-4">
+              <div className="mt-8 text-start px-4">
                 <p className="text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2 font-medium">
                   {product.category}
                 </p>
@@ -100,8 +100,8 @@ const FeaturedProducts = () => {
 
         {/* Final CTA */}
         <div className="mt-12 flex justify-center">
-           <button className="px-12 py-4 bg-stone-900 text-white text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-stone-700 transition-all duration-500">
-             Explore All Artifacts
+           <button className="px-12 py-4 bg-stone-900 text-white text-[10px] flex gap-2 items-center justify-center uppercase tracking-[0.4em] font-bold hover:bg-stone-700 transition-all duration-500">
+             Explore All Products <ArrowRight className="w-5 h-5" />
            </button>
         </div>
       </div>

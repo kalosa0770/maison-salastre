@@ -31,19 +31,19 @@ const trendingProducts = [
     name: "Chunky Knit Sweater",
     category: "KNITWEAR",
     price: "$200",
-    image: "https://images.unsplash.com/photo-1610734523746-35233fc221ee?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
 const TrendingNow = () => {
   return (
-    <section className="bg-white py-24">
+    <section className="py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="space-y-3">
             <h2 className="text-4xl md:text-5xl font-dancing tracking-tight text-stone-900">
-              Trending <span className="font-light text-stone-500">Now</span>
+              Trending Now
             </h2>
           </div>
           
@@ -56,11 +56,11 @@ const TrendingNow = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+        <div className="md:flex md:flex-wrap grid grid-cols-2 -mx-4">
           {trendingProducts.map((product) => (
-            <div key={product.id} className="group cursor-pointer">
+            <div key={product.id} className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-16 group">
               {/* Image Container */}
-              <div className="relative aspect-[2/3] overflow-hidden bg-stone-50">
+              <div className="relative aspect-[2/3] overflow-hidden bg-stone-50 rounded-t-[20rem]">
                 <img
                   src={product.image}
                   alt={product.name}
@@ -77,11 +77,11 @@ const TrendingNow = () => {
               </div>
 
               {/* Product Info - Centered for Boutique Feel */}
-              <div className="mt-8 text-center flex flex-col items-center">
+              <div className="mt-8 text-start flex flex-col">
                 <span className="text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2">
                   {product.category}
                 </span>
-                <h3 className="text-[13px] font-medium text-stone-900 tracking-widest uppercase mb-1 px-4 leading-relaxed">
+                <h3 className="text-[13px] font-medium text-stone-900 tracking-widest uppercase mb-1 leading-relaxed">
                   {product.name}
                 </h3>
                 <div className="w-4 h-[1px] bg-stone-200 my-2"></div>

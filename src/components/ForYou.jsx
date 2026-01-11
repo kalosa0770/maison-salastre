@@ -15,7 +15,7 @@ const ForYou = () => {
           
           {/* Left Side: Editorial Image */}
           <div className="relative group">
-            <div className="relative aspect-[4/5] overflow-hidden">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-t-[20rem]">
               <img
                 src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"
                 alt="Selected Look for You"
@@ -41,7 +41,7 @@ const ForYou = () => {
               <h3 className="text-[11px] tracking-[0.3em] text-stone-500 uppercase font-bold mb-4 font-pt-sans">Maison Spotlight</h3>
               <h2 className="text-5xl md:text-6xl tracking-wide font-dancing leading-none text-stone-900">
                 The Signature <br />
-                <span className="font-light  text-stone-600 underline underline-offset-8 decoration-stone-200">Wool Wrap</span>
+                Wool Wrap
               </h2>
             </div>
 

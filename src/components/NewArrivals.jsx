@@ -41,7 +41,7 @@ const newItems = [
 
 const NewArrivals = () => {
   return (
-    <section className="bg-white py-24 overflow-hidden">
+    <section className="py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Header with Navigation Controls */}
@@ -71,22 +71,16 @@ const NewArrivals = () => {
           {newItems.map((item) => (
             <div 
               key={item.id} 
-              className="min-w-[300px] md:min-w-[380px] snap-start group cursor-pointer"
+              className="min-w-[300px] md:min-w-[380px] snap-start group cursor-pointer "
             >
               {/* Image Box */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 mb-6">
+              <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 mb-6 rounded-t-[20rem]">
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0"
                 />
                 
-                {/* Minimalist Tag */}
-                <div className="absolute top-6 left-6">
-                  <span className="bg-white/80 backdrop-blur-sm px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold text-stone-900 shadow-sm">
-                    {item.tag}
-                  </span>
-                </div>
 
                 {/* Quick Buy Interaction */}
                 <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center translate-y-4 group-hover:translate-y-0">
