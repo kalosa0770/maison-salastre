@@ -43,7 +43,7 @@ const Homepage = () => {
   }, [menuOpen]);
 
   return (
-    <div className="relative bg-[#F7F5F2] min-h-screen font-sans antialiased text-stone-900">
+    <div className="relative min-h-screen font-sans antialiased text-stone-900 bg-[#F7F5F2] light">
       {/* Standard Header: Remains interactive and sharp. 
           We keep it outside the motion.div so it doesn't blur with the content.
       */}

@@ -5,3 +5,24 @@
   --font-dancing: 'Dancing Script', cursive;
   --font-pt-sans: 'PT Sans', sans-serif;
 }
+
+/* FORCED LIGHT MODE RESET */
+:root {
+  color-scheme: light; /* Tells the browser this site is designed for light mode */
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #F7F5F2 !important; /* Forces your specific stone background */
+    color: #1c1917 !important; /* Forces stone-900 text */
+  }
+}
+
+/* Ensure images maintain their high-end desaturated look even in dark system modes */
+img {
+  filter: brightness(.9) contrast(1.1);
+}
+
+.group:hover img {
+  filter: brightness(1) contrast(1);
+}
