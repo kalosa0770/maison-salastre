@@ -1,10 +1,22 @@
 import React from "react";
 import { ArrowRight, ShoppingBag, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCart } from "./CartContext"; // Import the cart hook
 
 const ForYou = () => {
+  const { addToCart } = useCart();
+
+  // Define the specific product data for this spotlight section
+  const spotlightProduct = {
+    id: "spotlight-wrap-01",
+    name: "The Signature Wool Wrap",
+    price: "$1,250",
+    category: "Maison Spotlight",
+    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full" id="for-you">
       {/* Section Label / Divider */}
       <div className="flex items-center gap-6 mb-16 md:mb-24">
         <span className="text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold whitespace-nowrap">
@@ -27,15 +39,15 @@ const ForYou = () => {
           {/* Primary Arched Image */}
           <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm">
             <img
-              src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"
-              alt="Selected Look for You"
+              src={spotlightProduct.image}
+              alt={spotlightProduct.name}
               className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"
             />
             {/* Subtle Inner Frame Overlay */}
             <div className="absolute inset-6 border border-white/10 pointer-events-none" />
           </div>
 
-          {/* Floating Detail Card - Hidden on small mobile, beautiful on tablet+ */}
+          {/* Floating Detail Card */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -61,11 +73,11 @@ const ForYou = () => {
             transition={{ duration: 0.6 }}
           >
             <p className="text-[10px] tracking-[0.4em] text-stone-400 uppercase font-semibold mb-4">
-              Maison Spotlight
+              {spotlightProduct.category}
             </p>
             <h2 className="text-4xl md:text-6xl font-serif leading-[1.1] text-stone-900">
               The Signature <br />
-              <span className="italic font-light text-stone-500">Wool Wrap</span>
+              <span className="italic">Wool Wrap</span>
             </h2>
           </motion.div>
 
@@ -85,14 +97,17 @@ const ForYou = () => {
             className="space-y-10"
           >
             <div className="flex items-baseline gap-4">
-              <span className="text-3xl font-light text-stone-900">$1,250</span>
+              <span className="text-3xl font-light text-stone-900">{spotlightProduct.price}</span>
               <span className="text-[9px] tracking-[0.2em] text-stone-400 uppercase font-medium">
                 Complimentary Tailoring
               </span>
             </div>
 
             <div className="flex items-center gap-4">
-              <button className="flex-1 md:flex-none px-10 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all duration-300 flex items-center justify-center gap-3">
+              <button 
+                onClick={() => addToCart(spotlightProduct)}
+                className="flex-1 md:flex-none px-10 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all duration-300 flex items-center justify-center gap-3 active:scale-95"
+              >
                 <ShoppingBag className="w-4 h-4" />
                 Acquire Piece
               </button>

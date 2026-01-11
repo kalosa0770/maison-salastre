@@ -11,8 +11,8 @@ const Footer = () => {
           
           {/* Brand Column */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-serif tracking-tight text-stone-900">
-              Maison <span className="italic font-light">SalAstré</span>
+            <h2 className="text-2xl font-dancing tracking-tight text-stone-900">
+              Maison SalAstré
             </h2>
             <p className="text-stone-500 text-[11px] leading-relaxed tracking-[0.1em] font-light uppercase max-w-[200px]">
               Timeless pieces, crafted for the discerning eye.
