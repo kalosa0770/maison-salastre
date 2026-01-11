@@ -1,5 +1,6 @@
 import React from "react";
-import { Plus, ArrowRight, ArrowLeft } from "lucide-react";
+import { Plus, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const newItems = [
   {
@@ -30,88 +31,77 @@ const newItems = [
     image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80",
     tag: "Essential"
   },
-  {
-    id: 5,
-    name: "Ivory Wide-Leg Trouser",
-    price: "$480",
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
-    tag: "New Arrival"
-  }
 ];
 
 const NewArrivals = () => {
   return (
-    <section className="py-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        
-        {/* Header with Navigation Controls */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="space-y-4">
-            <h2 className="text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-stone-300"></span>
-              The Latests
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-dancing tracking-tight text-stone-900">
-              New <span className="font-light">Arrivals</span>
-            </h3>
-          </div>
+    <div className="w-full">
+      {/* Header - Minimalist & Centered */}
+      <div className="text-center mb-16 md:mb-24">
+        <motion.span 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="text-[10px] tracking-[0.6em] text-stone-400 uppercase font-medium mb-4 block"
+        >
+          Fresh Perspective
+        </motion.span>
+        <h3 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
+          New <span className="italic font-light">Arrivals</span>
+        </h3>
+        <div className="w-12 h-px bg-stone-300 mx-auto mt-8" />
+      </div>
 
-          <div className="flex items-center gap-4">
-            <button className="p-4 border border-stone-200 rounded-full hover:bg-stone-50 transition-colors group">
-              <ArrowLeft className="w-4 h-4 text-stone-400 group-hover:text-black" />
-            </button>
-            <button className="p-4 border border-stone-200 rounded-full hover:bg-stone-50 transition-colors group">
-              <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-black" />
-            </button>
-          </div>
-        </div>
+      {/* Grid Layout - 2 columns on mobile, 4 (with wrap) on large screens */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20">
+        {newItems.map((item, index) => (
+          <motion.div 
+            key={item.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className="group cursor-pointer"
+          >
+            {/* Image Container with the Brand's Arched Aesthetic */}
+            <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm transition-all duration-700 group-hover:shadow-md">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale-[15%] group-hover:grayscale-0"
+              />
 
-        {/* Horizontal Scroll Container */}
-        <div className="flex gap-8 overflow-x-auto pb-12 scrollbar-hide snap-x snap-mandatory">
-          {newItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="min-w-[300px] md:min-w-[380px] snap-start group cursor-pointer "
-            >
-              {/* Image Box */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 mb-6 rounded-t-[20rem]">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0"
-                />
-                
-
-                {/* Quick Buy Interaction */}
-                <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center translate-y-4 group-hover:translate-y-0">
-                  <button className="bg-white py-4 px-8 text-[10px] uppercase tracking-widest font-bold flex items-center gap-3 hover:bg-black hover:text-white transition-colors duration-300 shadow-xl">
-                    <Plus className="w-3 h-3" /> Quick Add
-                  </button>
-                </div>
-              </div>
-
-              {/* Text Meta */}
-              <div className="flex justify-between items-start px-1">
-                <div className="space-y-1">
-                  <h4 className="text-[13px] uppercase tracking-widest font-medium text-stone-900 leading-none">
-                    {item.name}
-                  </h4>
-                  <p className="text-[11px] font-serif italic text-stone-500">Maison Salastre Studio</p>
-                </div>
-                <span className="text-sm font-light text-stone-800">{item.price}</span>
+              {/* Centered Hover Quick Add - Very Boutique feel */}
+              <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-4">
+                <button className="bg-white/95 backdrop-blur-sm py-3 px-6 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 hover:bg-stone-900 hover:text-white transition-all duration-500 shadow-xl transform scale-95 group-hover:scale-100">
+                  <Plus className="w-3.5 h-3.5" /> Quick Add
+                </button>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {/* Footer Link */}
-        <div className="mt-8 flex justify-center">
-           <button className="px-10 py-4 border border-stone-200 text-[10px] uppercase tracking-[0.3em] font-bold hover:border-black transition-all duration-500">
-             Explore All Arrivals
-           </button>
-        </div>
+
+            {/* Info Section */}
+            <div className="mt-8 text-center px-2">
+              <h4 className="text-[11px] md:text-[13px] font-medium uppercase tracking-[0.15em] text-stone-900 mb-1.5 leading-tight group-hover:text-stone-500 transition-colors">
+                {item.name}
+              </h4>
+              <p className="text-[9px] md:text-[10px] italic font-serif text-stone-400 mb-2 tracking-wide">
+                {item.tag}
+              </p>
+              <span className="text-xs md:text-sm font-light text-stone-800 tracking-wider">
+                {item.price}
+              </span>
+            </div>
+          </motion.div>
+        ))}
       </div>
-    </section>
+
+      {/* Footer CTA */}
+      <div className="mt-20 md:mt-28 flex justify-center">
+        <button className="px-14 py-5 border border-stone-200 text-[10px] uppercase tracking-[0.4em] font-bold text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-500 flex items-center gap-3 group">
+          Explore All Arrivals
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+    </div>
   );
 };
 

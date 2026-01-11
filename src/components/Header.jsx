@@ -4,151 +4,163 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Header = ({ menuOpen, setMenuOpen, isOverlay }) => {
   const navLinks = [
-    "For You",
-    "Trending Now",
-    "Top Selections",
-    "Featured Products",
     "New Arrivals",
+    "Trending Now",
+    "Featured Products",
+    "Top Selections",
+    "For You",
   ];
 
   const [scrolled, setScrolled] = useState(false);
+  
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock scroll when menu is open
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
-  }, [menuOpen]);
+  // Animation variants for the mobile menu links
+  const menuLinkVariants = {
+    hidden: { opacity: 0, x: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: 0.1 + i * 0.08,
+        duration: 0.5,
+        ease: [0.19, 1, 0.22, 1],
+      },
+    }),
+  };
 
-  // Overlay version for mobile menu + backdrop
   if (isOverlay) {
     return (
-      <>
-        {/* Backdrop */}
-        <AnimatePresence>
-          {menuOpen && (
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Dark sophisticated backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 bg-black/30 backdrop-blur-md z-40 lg:hidden"
+              className="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-[70] lg:hidden"
               onClick={() => setMenuOpen(false)}
             />
-          )}
-        </AnimatePresence>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {menuOpen && (
+            {/* Slide-out Mobile Drawer */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 top-[112px] bg-white z-50 lg:hidden"
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white z-[80] lg:hidden shadow-2xl flex flex-col"
             >
-              <nav className="flex flex-col p-8 gap-8 h-full">
-                {navLinks.map((link) => (
-                  <a
+              <div className="flex justify-end p-6">
+                <button onClick={() => setMenuOpen(false)} className="p-2">
+                  <X className="w-6 h-6 stroke-[1.2px] text-stone-900" />
+                </button>
+              </div>
+
+              <nav className="flex flex-col px-10 pt-4 gap-8">
+                {navLinks.map((link, i) => (
+                  <motion.a
                     key={link}
+                    custom={i}
+                    variants={menuLinkVariants}
+                    initial="hidden"
+                    animate="visible"
                     href="#"
-                    className="text-2xl font-serif border-b border-stone-100 pb-4 flex justify-between items-center group"
+                    className="text-2xl font-light tracking-tight text-stone-900 flex justify-between items-center group"
                     onClick={() => setMenuOpen(false)}
                   >
                     {link}
-                    <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
+                    <ArrowRight className="w-5 h-5 opacity-30 group-hover:opacity-100 transition-opacity" />
+                  </motion.a>
                 ))}
-
-                <div className="mt-auto pt-10 text-stone-400 text-xs tracking-widest uppercase">
-                  © 2026 Maison Salastre
-                </div>
               </nav>
+
+              <div className="mt-auto p-10 space-y-8">
+                <div className="flex gap-8 border-t border-stone-100 pt-8">
+                  <button className="flex items-center gap-2 text-sm uppercase tracking-widest text-stone-500">
+                    <User className="w-4 h-4" /> Account
+                  </button>
+                  <button className="flex items-center gap-2 text-sm uppercase tracking-widest text-stone-500">
+                    <ShoppingBag className="w-4 h-4" /> Cart (0)
+                  </button>
+                </div>
+                <p className="text-[10px] text-stone-400 tracking-[0.2em] uppercase">
+                  © 2026 Maison Salastre
+                </p>
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </>
+          </>
+        )}
+      </AnimatePresence>
     );
   }
 
-  // Desktop + mobile header
   return (
     <header
-      className={`w-full fixed top-0 z-[60] transition-all duration-300 ${
+      className={`w-full fixed top-0 z-[60] transition-all duration-500 ease-in-out ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md border-b shadow-sm"
-          : "bg-stone-50/80 backdrop-blur-sm"
+          ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
+          : "bg-transparent py-5"
       }`}
     >
-      {/* Top utility bar */}
-      <div className="w-full bg-black text-white text-[10px] uppercase tracking-[0.2em] py-2 text-center font-medium">
-        Defining the Architecture of Modern Living
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex-1">
-          <a
-            href="/"
-            className="text-2xl font-dancing tracking-wide hover:opacity-70 transition-opacity cursor-pointer"
-          >
-            Maison SalAstré
-          </a>
-        </div>
-
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex items-center justify-between">
+        
+        {/* Left: Desktop Navigation */}
+        <nav className="hidden lg:flex flex-1 items-center gap-10">
+          {navLinks.slice(0, 3).map((link) => (
             <a
               key={link}
               href="#"
-              className="relative text-[11px] uppercase tracking-[0.15em] text-stone-600 hover:text-black transition-colors duration-300 group"
+              className="relative text-[10px] uppercase tracking-[0.25em] text-stone-600 hover:text-black transition-colors duration-300 group"
             >
               {link}
-              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </a>
           ))}
         </nav>
 
-        {/* Right icons */}
-        <div className="flex-1 flex items-center justify-end gap-5">
-          {/* Search */}
-          <div className="hidden sm:flex items-center border-b border-stone-200 focus-within:border-black transition-colors py-1 mr-4">
-            <Search className="w-3.5 h-3.5 text-stone-400" />
+        {/* Center: Branding */}
+        <div className="flex-none text-center">
+          <a
+            href="/"
+            className="text-2xl md:text-3xl font-serif tracking-tight text-stone-900 transition-opacity hover:opacity-70"
+          >
+            Maison <span className="italic font-light">SalAstré</span>
+          </a>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex-1 flex items-center justify-end gap-5 md:gap-8">
+          {/* Search: Luxury minimal style */}
+          <div className="hidden md:flex items-center group cursor-pointer">
             <input
               type="text"
               placeholder="SEARCH"
-              className="bg-transparent border-none text-[10px] tracking-widest pl-3 focus:outline-none w-24 focus:w-40 transition-all duration-500 uppercase"
+              className="bg-transparent border-none text-[10px] tracking-widest text-right pr-3 focus:outline-none w-0 group-hover:w-32 focus:w-32 transition-all duration-500 uppercase placeholder:text-stone-400"
             />
+            <Search className="w-[18px] h-[18px] stroke-[1.2px] text-stone-700" />
           </div>
 
-          {/* User icon */}
-          <button className="text-stone-700 hover:text-black transition-colors">
-            <User className="w-4 h-4 stroke-[1.5px]" />
+          <button className="hidden sm:block text-stone-700 hover:text-black transition-colors">
+            <User className="w-[18px] h-[18px] stroke-[1.2px]" />
           </button>
 
-          {/* Shopping bag */}
           <button className="relative text-stone-700 hover:text-black transition-colors">
-            <ShoppingBag className="w-4 h-4 stroke-[1.5px]" />
-            <span className="absolute -top-1 -right-1.5 bg-black text-white text-[8px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+            <ShoppingBag className="w-[18px] h-[18px] stroke-[1.2px]" />
+            <span className="absolute -top-2 -right-2 bg-stone-900 text-white text-[8px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
               0
             </span>
           </button>
 
-          {/* Mobile Hamburger */}
           <button
-            className="lg:hidden ml-2 p-1 relative z-[60] text-stone-700 hover:text-black transition-colors"
-            onClick={() => setMenuOpen(!menuOpen)}
+            className="lg:hidden p-1 text-stone-900"
+            onClick={() => setMenuOpen(true)}
           >
-            {menuOpen ? (
-              <X className="w-5 h-5 stroke-[2px]" />
-            ) : (
-              <Menu className="w-5 h-5 stroke-[2px]" />
-            )}
+            <Menu className="w-6 h-6 stroke-[1.2px]" />
           </button>
         </div>
       </div>

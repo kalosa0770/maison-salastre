@@ -1,111 +1,101 @@
 import React from "react";
-import { ArrowRight, MoveUpRight } from "lucide-react";
+import { MoveUpRight, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const selections = [
   {
     id: 1,
     title: "The Sculpted Trench",
     subtitle: "Edition 001",
-    image:
-      "https://images.unsplash.com/photo-1585435465945-bef5a93f8849?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1585435465945-bef5a93f8849?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: 2,
     title: "Minimalist Silk Slip",
     subtitle: "Pure Mulberry",
-    image:
-      "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 3,
     title: "Pleated Artisan Trousers",
     subtitle: "Hand-Finished",
-    image:
-      "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    id: 4,
+    title: "Structured Crepe Blazer",
+    subtitle: "Limited Cut",
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
 const TopSelections = () => {
   return (
-    <section className="py-28 font-pt-sans">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Header */}
-        <header className="max-w-xl mb-24">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="w-10 h-px bg-stone-300" />
-            <span className="text-[10px] tracking-[0.45em] text-stone-400 uppercase font-semibold">
-              Curated Collection
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-dancing leading-tight text-stone-900">
-            Top Selections
-          </h2>
-        </header>
+    <section className="w-full">
+      {/* Section Header - Editorial Style */}
+      <div className="flex flex-col items-center mb-16 md:mb-24 text-center">
+        <span className="text-[10px] tracking-[0.5em] uppercase text-stone-400 mb-4 block">
+          Curated Excellence
+        </span>
+        <h2 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
+          Top <span className="italic font-light">Selections</span>
+        </h2>
+        <div className="w-10 h-px bg-stone-300 mt-8" />
+      </div>
 
-        {/* Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-14">
-          {/* Primary Feature */}
-          <article className="md:col-span-7 group cursor-pointer">
-            <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 rounded-t-[20rem]">
+      {/* Grid Layout - 2 columns on mobile, 4 on large screens */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-8">
+        {selections.map((item, index) => (
+          <motion.div 
+            key={item.id} 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1, duration: 0.8 }}
+            // Subtle offset on even items for desktop to create "Editorial" flow
+            className={`group cursor-pointer ${index % 2 !== 0 ? 'lg:mt-12' : ''}`}
+          >
+            {/* Image Container with high-fashion Arched top */}
+            <div className="relative aspect-[2/3] md:aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 border border-stone-200/50">
               <img
-                src={selections[0].image}
-                alt={selections[0].title}
-                className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-[1.8s] ease-out group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0"
               />
-              <div className="absolute top-8 right-8 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <MoveUpRight className="w-4 h-4 text-stone-900" />
+
+              {/* Sophisticated Hover Overlay */}
+              <div className="absolute inset-0 bg-stone-900/20 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 md:p-8">
+                <button className="w-full bg-white text-stone-900 py-3 md:py-4 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
+                  View <MoveUpRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
 
-            <div className="mt-8 flex items-end justify-between gap-6">
-              <div>
-                <p className="text-[10px] tracking-[0.35em] uppercase text-stone-400 mb-2">
-                  {selections[0].subtitle}
-                </p>
-                <h3 className="text-2xl font-serif text-stone-900">
-                  {selections[0].title}
-                </h3>
-              </div>
-
-              <button className="text-[10px] uppercase tracking-[0.35em] font-semibold border-b border-stone-900 pb-1 transition-all hover:text-stone-500 hover:border-stone-400">
-                Explore
-              </button>
+            {/* Typography */}
+            <div className="mt-8 px-1">
+              <p className="text-[8px] md:text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2 font-semibold">
+                {item.subtitle}
+              </p>
+              <h3 className="text-xs md:text-[14px] font-medium text-stone-800 tracking-widest uppercase leading-snug group-hover:text-stone-500 transition-colors">
+                {item.title}
+              </h3>
             </div>
-          </article>
+          </motion.div>
+        ))}
+      </div>
 
-          {/* Secondary Stack */}
-          <aside className="md:col-span-5 flex flex-col gap-24 md:pt-28">
-            {selections.slice(1).map((item) => (
-              <article key={item.id} className="group cursor-pointer">
-                <div className="relative aspect-square overflow-hidden bg-stone-100 rounded-t-[20rem] mb-6">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-                  />
-                </div>
-                <p className="text-[9px] tracking-[0.3em] uppercase text-stone-400 mb-2">
-                  {item.subtitle}
-                </p>
-                <h4 className="text-sm font-medium uppercase tracking-wide text-stone-900 group-hover:text-stone-600 transition-colors">
-                  {item.title}
-                </h4>
-              </article>
-            ))}
-
-            {/* View All */}
-            <div>
-              <button className="flex items-center gap-5 group">
-                <div className="w-11 h-11 rounded-full border border-stone-300 flex items-center justify-center transition-all duration-500 group-hover:bg-stone-900 group-hover:border-stone-900">
-                  <ArrowRight className="w-4 h-4 text-stone-900 group-hover:text-white transition-colors" />
-                </div>
-                <span className="text-[10px] uppercase tracking-[0.35em] font-semibold text-stone-900">
-                  View Full Collection
-                </span>
-              </button>
-            </div>
-          </aside>
-        </div>
+      {/* Section CTA */}
+      <div className="mt-20 md:mt-32 flex justify-center">
+        <motion.button 
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="group relative px-12 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.4em] font-bold overflow-hidden"
+        >
+          <span className="relative z-10 flex items-center gap-3">
+            View All Selections <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </span>
+          <div className="absolute inset-0 bg-stone-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+        </motion.button>
       </div>
     </section>
   );
