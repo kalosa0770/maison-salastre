@@ -129,7 +129,7 @@ const Header = ({ menuOpen, setMenuOpen, isOverlay }) => {
             href="/"
             className="text-2xl md:text-3xl font-dancing font-extrabold tracking-tight text-stone-900 transition-opacity hover:opacity-70"
           >
-            Maison <span className="italic  font-light">SalAstré</span>
+            Maison SalAstré
           </a>
         </div>
 
