@@ -3,7 +3,7 @@ import { ArrowRight, ShoppingBag, Heart } from "lucide-react";
 
 const ForYou = () => {
   return (
-    <section className="bg-stone-50 py-20 lg:py-32">
+    <section className="py-10 lg:py-22">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Label */}
         <div className="flex items-center gap-4 mb-12">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+
 import Header from "./Header";
 import Hero from "./Hero";
 import FeaturedProducts from "./FeaturedProducts";
@@ -8,35 +9,52 @@ import ForYou from "./ForYou";
 import TopSelections from "./TopSelections";
 import NewArrivals from "./NewArrivals";
 import Footer from "./Footer";
+
+const SectionDivider = () => (
+  <div className="flex justify-center">
+    <span className="w-[100%] h-px bg-stone-300/60" />
+  </div>
+);
+
 const Homepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative bg-[#FAF3E8]">
-      {/* ENTIRE PAGE WRAPPER THAT WILL BLUR */}
+    <div className="relative bg-[#F7F5F2]">
+      {/* Page Blur Wrapper */}
       <motion.div
         animate={{
           filter: menuOpen ? "blur(10px)" : "blur(0px)",
-          scale: menuOpen ? 0.98 : 1
+          scale: menuOpen ? 0.98 : 1,
         }}
         transition={{
           duration: 0.35,
-          ease: [0.16, 1, 0.3, 1]
+          ease: [0.16, 1, 0.3, 1],
         }}
       >
-        {/* Header is included in blur if desired; can separate if you want header to stay sharp */}
         <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+
         <Hero />
+
+        <SectionDivider />
         <FeaturedProducts />
+
+        <SectionDivider />
         <TrendingNow />
+
+        <SectionDivider />
         <ForYou />
+
+        <SectionDivider />
         <TopSelections />
+
+        <SectionDivider />
         <NewArrivals />
+
         <Footer />
-       
       </motion.div>
 
-      {/* Mobile menu and backdrop are rendered outside the blur wrapper */}
+      {/* Overlay Header / Mobile Menu */}
       <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} isOverlay />
     </div>
   );
