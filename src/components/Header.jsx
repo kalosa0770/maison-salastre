@@ -127,9 +127,9 @@ const Header = ({ menuOpen, setMenuOpen, isOverlay }) => {
         <div className="flex-none text-center">
           <a
             href="/"
-            className="text-2xl md:text-3xl font-serif tracking-tight text-stone-900 transition-opacity hover:opacity-70"
+            className="text-2xl md:text-3xl font-dancing font-extrabold tracking-tight text-stone-900 transition-opacity hover:opacity-70"
           >
-            Maison <span className="italic font-light">SalAstré</span>
+            Maison <span className="italic  font-light">SalAstré</span>
           </a>
         </div>
 
