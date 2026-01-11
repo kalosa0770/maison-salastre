@@ -36,7 +36,7 @@ const featured = [
 
 const FeaturedProducts = () => {
   return (
-    <section className="py-24">
+    <section className="w-full">
       {/* Section Header - Editorial Style */}
       <div className="flex flex-col items-center mb-16 md:mb-24 text-center">
         <span className="text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold mb-4 block">
