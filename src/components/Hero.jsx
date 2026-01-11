@@ -18,7 +18,7 @@ const Hero = () => {
           className="w-full h-full object-cover object-center"
         />
         {/* Sophisticated Gradient Overlay: Darker at bottom/left for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
       </motion.div>
 
       {/* Content Container */}
