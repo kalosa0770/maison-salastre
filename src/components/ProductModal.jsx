@@ -10,7 +10,7 @@ const ProductModal = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-4 min-h-screen">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -25,7 +25,7 @@ const ProductModal = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          className="relative w-full h-full md:h-auto md:max-w-5xl bg-white shadow-2xl overflow-y-auto md:overflow-hidden flex flex-col md:flex-row md:max-h-[90vh]"
+          className="relative w-full h-full md:h-auto md:max-w-5xl bg-white shadow-2xl overflow-y-auto md:overflow-hidden flex flex-col md:flex-row md:max-h-[90vh] rounded-t-[20rem]"
         >
           {/* Close Button - Fixed on mobile for accessibility */}
           <button 
@@ -71,10 +71,6 @@ const ProductModal = () => {
               >
                 <ShoppingBag className="w-4 h-4" /> Add to Cart
               </button>
-              
-              <div className="flex items-center justify-center gap-2 text-[8px] uppercase tracking-[0.2em] text-stone-400 py-2">
-                <Shield className="w-3 h-3" /> Secure Artisan Acquisition
-              </div>
             </div>
 
             {/* Extra padding for mobile scroll-to-bottom room */}
