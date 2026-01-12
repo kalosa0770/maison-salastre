@@ -10,7 +10,8 @@ const ProductModal = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4">
+        {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -19,37 +20,65 @@ const ProductModal = () => {
           className="absolute inset-0 bg-stone-900/60 backdrop-blur-md"
         />
 
+        {/* Modal Container */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          className="relative w-full max-w-5xl bg-white shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="relative w-full h-full md:h-auto md:max-w-5xl bg-white shadow-2xl overflow-y-auto md:overflow-hidden flex flex-col md:flex-row md:max-h-[90vh]"
         >
-          <button onClick={closeQuickView} className="absolute top-6 right-6 z-10 p-2 hover:bg-stone-100 rounded-full">
-            <X className="w-5 h-5" />
+          {/* Close Button - Fixed on mobile for accessibility */}
+          <button 
+            onClick={closeQuickView} 
+            className="fixed md:absolute top-4 right-4 z-50 p-3 bg-white/80 backdrop-blur-sm md:bg-transparent hover:bg-stone-100 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5 text-stone-900" />
           </button>
 
-          <div className="w-full md:w-1/2 bg-stone-100">
-            <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover" />
+          {/* Left Side: Image - Full width on mobile, half on desktop */}
+          <div className="w-full md:w-1/2 min-h-[40vh] md:min-h-0 bg-stone-100">
+            <img 
+              src={selectedProduct.image} 
+              alt={selectedProduct.name} 
+              className="w-full h-full object-cover" 
+            />
           </div>
 
-          <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center">
-            <span className="text-[10px] tracking-[0.4em] text-stone-400 uppercase font-bold">{selectedProduct.category}</span>
-            <h2 className="text-4xl font-serif text-stone-900 mt-2">{selectedProduct.name}</h2>
-            <p className="text-xl font-light text-stone-600 mt-4">{selectedProduct.price}</p>
+          {/* Right Side: Content - Scrollable on mobile, centered on desktop */}
+          <div className="w-full md:w-1/2 p-6 md:p-16 flex flex-col justify-center bg-white">
+            <div className="space-y-2">
+              <span className="text-[10px] tracking-[0.4em] text-stone-400 uppercase font-bold block">
+                {selectedProduct.category}
+              </span>
+              <h2 className="text-3xl md:text-4xl font-serif text-stone-900 leading-tight">
+                {selectedProduct.name}
+              </h2>
+              <p className="text-xl font-light text-stone-600 italic">
+                {selectedProduct.price}
+              </p>
+            </div>
             
-            <p className="text-stone-500 leading-relaxed font-light mt-6 italic">
-              {selectedProduct.description || "A masterwork of sustainable luxury."}
+            <div className="w-12 h-px bg-stone-200 my-6 md:my-8" />
+
+            <p className="text-stone-500 leading-relaxed font-light text-sm md:text-base italic">
+              {selectedProduct.description || "A masterwork of sustainable luxury, designed for the intentional wardrobe."}
             </p>
 
-            <div className="mt-10 space-y-4">
+            <div className="mt-8 md:mt-12 space-y-4">
               <button 
                 onClick={() => addToCart(selectedProduct)}
-                className="w-full bg-stone-900 text-white py-5 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all flex items-center justify-center gap-3"
+                className="w-full bg-stone-900 text-white py-5 text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg"
               >
                 <ShoppingBag className="w-4 h-4" /> Add to Cart
               </button>
+              
+              <div className="flex items-center justify-center gap-2 text-[8px] uppercase tracking-[0.2em] text-stone-400 py-2">
+                <Shield className="w-3 h-3" /> Secure Artisan Acquisition
+              </div>
             </div>
+
+            {/* Extra padding for mobile scroll-to-bottom room */}
+            <div className="h-8 md:hidden" />
           </div>
         </motion.div>
       </div>
