@@ -1,18 +1,18 @@
 import React from "react";
-import { ArrowRight, ShoppingBag, Heart } from "lucide-react";
+import { ArrowRight, Eye, Heart } from "lucide-react"; // Replaced ShoppingBag with Eye
 import { motion } from "framer-motion";
-import { useCart } from "./CartContext"; // Import the cart hook
+import { useCart } from "./CartContext"; 
 
 const ForYou = () => {
-  const { addToCart } = useCart();
+  const { openQuickView } = useCart(); // Use openQuickView instead of addToCart
 
-  // Define the specific product data for this spotlight section
   const spotlightProduct = {
     id: "spotlight-wrap-01",
     name: "The Signature Wool Wrap",
     price: "$1,250",
     category: "Maison Spotlight",
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"
+    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80",
+    description: "A silhouette designed to harmonize with the body. Expertly rendered in sustainably sourced Merino wool, this piece represents our commitment to longevity and form. Every stitch is a testament to the Builders of Consequence."
   };
 
   return (
@@ -34,16 +34,21 @@ const ForYou = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative"
+          className="relative cursor-pointer"
+          onClick={() => openQuickView(spotlightProduct)}
         >
           {/* Primary Arched Image */}
-          <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm group">
             <img
               src={spotlightProduct.image}
               alt={spotlightProduct.name}
-              className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
             />
-            {/* Subtle Inner Frame Overlay */}
+            <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+               <div className="bg-white/90 backdrop-blur-sm px-6 py-3 text-[9px] uppercase tracking-widest font-bold shadow-xl">
+                 Explore Detail
+               </div>
+            </div>
             <div className="absolute inset-6 border border-white/10 pointer-events-none" />
           </div>
 
@@ -87,7 +92,7 @@ const ForYou = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-stone-600 leading-relaxed text-base md:text-lg font-light max-w-md"
           >
-            A silhouette designed to harmonize with the body. Expertly rendered in sustainably sourced Merino wool, this piece represents our commitment to longevity and form.
+            {spotlightProduct.description}
           </motion.p>
 
           <motion.div 
@@ -104,12 +109,13 @@ const ForYou = () => {
             </div>
 
             <div className="flex items-center gap-4">
+              {/* UPDATED: Button now opens QuickView instead of adding to cart */}
               <button 
-                onClick={() => addToCart(spotlightProduct)}
-                className="flex-1 md:flex-none px-10 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all duration-300 flex items-center justify-center gap-3 active:scale-95"
+                onClick={() => openQuickView(spotlightProduct)}
+                className="flex-1 md:flex-none px-10 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 shadow-lg"
               >
-                <ShoppingBag className="w-4 h-4" />
-                Acquire Piece
+                <Eye className="w-4 h-4" />
+                View Narrative
               </button>
 
               <button className="p-5 border border-stone-200 text-stone-400 hover:text-red-400 hover:border-red-100 hover:bg-red-50/30 transition-all duration-300 group">
@@ -126,7 +132,6 @@ const ForYou = () => {
             </a>
           </motion.div>
         </div>
-
       </div>
     </div>
   );

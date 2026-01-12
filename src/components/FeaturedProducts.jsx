@@ -1,7 +1,7 @@
 import React from "react";
-import { ShoppingBag, ArrowRight } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react"; // Replaced ShoppingBag with Eye
 import { motion } from "framer-motion";
-import { useCart } from "./CartContext"; // Import the hook
+import { useCart } from "./CartContext"; 
 
 const featured = [
   {
@@ -10,6 +10,7 @@ const featured = [
     price: "$1,200",
     category: "Outerwear",
     image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80",
+    description: "A testament to structural elegance. This coat is tailored from heavy-weight Italian wool with a signature double-breasted closure."
   },
   {
     id: "f2",
@@ -17,6 +18,7 @@ const featured = [
     price: "$380",
     category: "Tops",
     image: "https://images.unsplash.com/photo-1551163943-3f6a855d1153?auto=format&fit=crop&w=800&q=80",
+    description: "Sheer sophistication. Crafted from 100% silk organza with hand-finished seams and a delicate neck tie."
   },
   {
     id: "f3",
@@ -24,6 +26,7 @@ const featured = [
     price: "$450",
     category: "Bottoms",
     image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
+    description: "The foundation of a consequential wardrobe. Features sharp pleats and a structured high-waist silhouette."
   },
   {
     id: "f4",
@@ -31,11 +34,12 @@ const featured = [
     price: "$620",
     category: "Accessories",
     image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
+    description: "Pared-back luxury. Handcrafted from pebbled calfskin with a minimalist magnetic closure and hidden compartments."
   },
 ];
 
 const FeaturedProducts = () => {
-  const { addToCart } = useCart(); // Access the add function
+  const { openQuickView } = useCart(); // Access the view logic
 
   return (
     <section className="w-full" id="featured-products">
@@ -50,7 +54,7 @@ const FeaturedProducts = () => {
         <div className="w-10 h-px bg-stone-300 mt-8" />
       </div>
 
-      {/* GRID — 2 columns on mobile, 4 on desktop to match your array length */}
+      {/* GRID */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20">
         {featured.map((product, index) => (
           <motion.div 
@@ -60,6 +64,7 @@ const FeaturedProducts = () => {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.8 }}
             className="group cursor-pointer"
+            onClick={() => openQuickView(product)} // Entire card opens the modal
           >
             {/* Image Container with Signature Arch */}
             <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 rounded-t-full transition-all duration-700 group-hover:shadow-lg">
@@ -69,18 +74,14 @@ const FeaturedProducts = () => {
                 className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 grayscale-[15%] group-hover:grayscale-0"
               />
 
-              {/* Quick Add Overlay */}
-              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4 md:p-6">
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent trigger navigation if you add links later
-                    addToCart(product);
-                  }}
-                  className="w-full bg-white/95 backdrop-blur-sm text-stone-900 py-3.5 text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold flex items-center justify-center gap-2 hover:bg-stone-900 hover:text-white transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 active:scale-95"
+              {/* View Detail Overlay */}
+              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-4 md:p-6">
+                <div 
+                  className="bg-white/95 backdrop-blur-sm text-stone-900 py-3.5 px-6 text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold flex items-center justify-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
                 >
-                  <ShoppingBag className="w-4 h-4" />
-                  Quick Add
-                </button>
+                  <Eye className="w-4 h-4" />
+                  View Collection
+                </div>
               </div>
             </div>
 

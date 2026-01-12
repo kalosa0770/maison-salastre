@@ -1,7 +1,7 @@
 import React from "react";
-import { Plus, ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { useCart } from "./CartContext"; // Import the cart hook
+import { useCart } from "./CartContext";
 
 const newItems = [
   {
@@ -39,80 +39,48 @@ const newItems = [
 ];
 
 const NewArrivals = () => {
-  const { addToCart } = useCart(); // Access global cart state
+  const { openQuickView } = useCart();
 
   return (
     <div className="w-full" id="new-arrivals">
-      {/* Header - Minimalist & Centered */}
       <div className="text-center mb-16 md:mb-24">
-        <motion.span 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="text-[10px] tracking-[0.6em] text-stone-400 uppercase font-bold mb-4 block"
-        >
-          Fresh Perspective
-        </motion.span>
-        <h3 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
+        <h3 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight">
           New <span className="italic font-light">Arrivals</span>
         </h3>
-        <div className="w-12 h-px bg-stone-300 mx-auto mt-8" />
       </div>
 
-      {/* GRID — 2 columns on mobile, 4 on desktop */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
         {newItems.map((item, index) => (
           <motion.div 
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.8 }}
+            transition={{ delay: index * 0.1 }}
             className="group cursor-pointer"
+            onClick={() => openQuickView(item)}
           >
-            {/* Image Container with the Brand's Arched Aesthetic */}
-            <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm transition-all duration-700 group-hover:shadow-md">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 shadow-sm">
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale-[15%] group-hover:grayscale-0"
+                className="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110"
               />
 
-              {/* Centered Hover Quick Add */}
-              <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center p-4">
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addToCart(item);
-                  }}
-                  className="bg-white/95 backdrop-blur-sm py-3 px-6 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 hover:bg-stone-900 hover:text-white transition-all duration-500 shadow-xl transform scale-95 group-hover:scale-100 active:scale-90"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Quick Add
-                </button>
+              {/* REPLACED: View Piece Overlay */}
+              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                <div className="bg-white/95 backdrop-blur-sm py-3 px-6 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 shadow-xl">
+                  <Eye className="w-3.5 h-3.5" /> View Piece
+                </div>
               </div>
             </div>
 
-            {/* Info Section */}
-            <div className="mt-8 text-center px-2">
-              <h4 className="text-[11px] md:text-[13px] font-medium uppercase tracking-[0.15em] text-stone-900 mb-1.5 leading-tight group-hover:text-stone-500 transition-colors">
-                {item.name}
-              </h4>
-              <p className="text-[9px] md:text-[10px] italic font-serif text-stone-400 mb-2 tracking-wide">
-                {item.tag}
-              </p>
-              <span className="text-xs md:text-sm font-light text-stone-800 tracking-wider">
-                {item.price}
-              </span>
+            <div className="mt-8 text-center">
+              <h4 className="text-[11px] font-medium uppercase tracking-[0.15em] text-stone-900">{item.name}</h4>
+              <p className="text-[10px] italic font-serif text-stone-400 mt-1">{item.tag}</p>
+              <span className="text-sm font-light text-stone-800 block mt-2">{item.price}</span>
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* Footer CTA */}
-      <div className="mt-20 md:mt-28 flex justify-center">
-        <button className="px-14 py-5 border border-stone-200 text-[10px] uppercase tracking-[0.4em] font-bold text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-500 flex items-center gap-3 group">
-          Explore All Arrivals
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
-import { ShoppingBag, ArrowUpRight } from "lucide-react";
+import { ShoppingBag, ArrowUpRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { useCart } from "./CartContext"; // Import the cart hook
+import { useCart } from "./CartContext"; 
 
 const trendingProducts = [
   {
@@ -10,6 +10,7 @@ const trendingProducts = [
     category: "Dresses",
     price: "$280",
     image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80",
+    description: "A masterclass in effortless draping, this asymmetric piece creates a sculptural silhouette for the modern builder."
   },
   {
     id: "t2",
@@ -17,6 +18,7 @@ const trendingProducts = [
     category: "Outerwear",
     price: "$450",
     image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
+    description: "Hand-finished grain leather with polished hardware. A consequential layer designed to age with distinction."
   },
   {
     id: "t3",
@@ -24,6 +26,7 @@ const trendingProducts = [
     category: "Skirts",
     price: "$150",
     image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=80",
+    description: "Fluid movement captured in precise pleats. A versatile foundation for an intentional wardrobe."
   },
   {
     id: "t4",
@@ -31,11 +34,12 @@ const trendingProducts = [
     category: "Knitwear",
     price: "$200",
     image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+    description: "Heavy-gauge sustainable wool knit for thermal protection and architectural volume."
   },
 ];
 
 const TrendingNow = () => {
-  const { addToCart } = useCart(); // Access global cart logic
+  const { openQuickView } = useCart(); 
 
   return (
     <div className="w-full" id="trending-now">
@@ -66,6 +70,7 @@ const TrendingNow = () => {
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.6 }}
             className="group cursor-pointer"
+            onClick={() => openQuickView(product)}
           >
             {/* Image Container with Dynamic Arch-to-Rectangle Hover */}
             <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 rounded-t-full transition-all duration-[0.8s] ease-in-out group-hover:rounded-t-lg shadow-sm">
@@ -82,17 +87,13 @@ const TrendingNow = () => {
                 </span>
               </div>
 
-              {/* Add to Cart Overlay */}
-              <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4">
+              {/* View Detail Overlay */}
+              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-4">
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addToCart(product);
-                  }}
-                  className="w-full bg-stone-900 text-white py-4 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-2 hover:bg-black transition-all duration-300 shadow-xl active:scale-95"
+                  className="bg-white/95 backdrop-blur-sm py-4 px-6 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 hover:bg-stone-900 hover:text-white transition-all duration-300 shadow-xl"
                 >
-                  <ShoppingBag className="w-3.5 h-3.5" />
-                  Add to Cart
+                  <Eye className="w-3.5 h-3.5" />
+                  View Detail
                 </button>
               </div>
             </div>

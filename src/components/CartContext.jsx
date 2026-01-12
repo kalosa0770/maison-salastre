@@ -3,31 +3,29 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]); // Renamed 'cart' to 'cartItems' for clarity
+  const [cartItems, setCartItems] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [lastAdded, setLastAdded] = useState(null);
-  
-  // NEW: State to track if the sidebar drawer is open
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  const openQuickView = (product) => setSelectedProduct(product);
+  const closeQuickView = () => setSelectedProduct(null);
+  const toggleCart = () => setIsCartOpen((prev) => !prev);
+
   const addToCart = (product) => {
-    setCartItems((prev) => [...prev, { ...product, cartId: Date.now() }]); // Added unique ID for list rendering
+    setCartItems((prev) => [...prev, { ...product, cartId: Date.now() }]);
     setLastAdded(product);
     setShowToast(true);
-    // Optional: Uncomment the line below if you want the cart to slide open automatically when adding
-    // setIsCartOpen(true); 
+    // When adding, we close the detail view and open the cart
+    setSelectedProduct(null);
+    setIsCartOpen(true);
   };
 
   const removeFromCart = (id) => {
-    // It's safer to filter by a unique ID than by index
     setCartItems((prev) => prev.filter((item) => item.id !== id && item.cartId !== id));
   };
 
-  const toggleCart = () => {
-    setIsCartOpen((prev) => !prev);
-  };
-
-  // Auto-hide toast
   useEffect(() => {
     if (showToast) {
       const timer = setTimeout(() => setShowToast(false), 3000);
@@ -37,25 +35,13 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider value={{ 
-      cartItems, // Changed from 'cart' to 'cartItems' to match your Sidebar/Header
-      addToCart, 
-      removeFromCart, 
-      cartCount: cartItems.length,
-      showToast,
-      setShowToast,
-      lastAdded,
-      isCartOpen, // REQUIRED for Sidebar visibility
-      toggleCart  // REQUIRED for Header button
+      cartItems, addToCart, removeFromCart, cartCount: cartItems.length,
+      showToast, setShowToast, lastAdded, isCartOpen, toggleCart,
+      selectedProduct, openQuickView, closeQuickView
     }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
-};
+export const useCart = () => useContext(CartContext);
