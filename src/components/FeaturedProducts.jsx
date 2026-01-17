@@ -1,45 +1,31 @@
-import React from "react";
-import { ArrowRight, Eye } from "lucide-react"; // Replaced ShoppingBag with Eye
+import React, { useEffect, useState } from "react";
+import { ArrowRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { useCart } from "./CartContext"; 
-
-const featured = [
-  {
-    id: "f1",
-    name: "Double-Breasted Wool Coat",
-    price: "$1,200",
-    category: "Outerwear",
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80",
-    description: "A testament to structural elegance. This coat is tailored from heavy-weight Italian wool with a signature double-breasted closure."
-  },
-  {
-    id: "f2",
-    name: "Silk Organza Blouse",
-    price: "$380",
-    category: "Tops",
-    image: "https://images.unsplash.com/photo-1551163943-3f6a855d1153?auto=format&fit=crop&w=800&q=80",
-    description: "Sheer sophistication. Crafted from 100% silk organza with hand-finished seams and a delicate neck tie."
-  },
-  {
-    id: "f3",
-    name: "Tailored High-Waist Trouser",
-    price: "$450",
-    category: "Bottoms",
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
-    description: "The foundation of a consequential wardrobe. Features sharp pleats and a structured high-waist silhouette."
-  },
-  {
-    id: "f4",
-    name: "Leather Envelope Bag",
-    price: "$620",
-    category: "Accessories",
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
-    description: "Pared-back luxury. Handcrafted from pebbled calfskin with a minimalist magnetic closure and hidden compartments."
-  },
-];
+import { useCart } from "./CartContext";
+import { ProductAPI } from "../api/product.api.js";
 
 const FeaturedProducts = () => {
-  const { openQuickView } = useCart(); // Access the view logic
+  const { openQuickView } = useCart();
+  const [featured, setFeatured] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const data = await ProductAPI.getFeatured();
+        setFeatured(data || []);
+      } catch (err) {
+        console.error("Failed to fetch featured products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
+  if (loading) return <div className="text-center py-16">Loading featured products...</div>;
+  if (featured.length === 0) return <div className="text-center py-16">No featured products found.</div>;
 
   return (
     <section className="w-full" id="featured-products">
@@ -55,53 +41,51 @@ const FeaturedProducts = () => {
       </div>
 
       {/* GRID */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-x-10 gap-y-20">
         {featured.map((product, index) => (
           <motion.div 
-            key={product.id} 
+            key={product._id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.8 }}
             className="group cursor-pointer"
-            onClick={() => openQuickView(product)} // Entire card opens the modal
+            onClick={() => openQuickView(product)}
           >
-            {/* Image Container with Signature Arch */}
+            {/* Image */}
             <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 rounded-t-full transition-all duration-700 group-hover:shadow-lg">
               <img
-                src={product.image}
-                alt={product.name}
+                src={product.images?.[0]}
+                alt={product.title}
                 className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 grayscale-[15%] group-hover:grayscale-0"
               />
 
-              {/* View Detail Overlay */}
+              {/* Overlay */}
               <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-4 md:p-6">
-                <div 
-                  className="bg-white/95 backdrop-blur-sm text-stone-900 py-3.5 px-6 text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold flex items-center justify-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
-                >
+                <div className="bg-white/95 backdrop-blur-sm text-stone-900 py-3.5 px-6 text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold flex items-center justify-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                   <Eye className="w-4 h-4" />
                   View Collection
                 </div>
               </div>
             </div>
 
-            {/* Product Info */}
+            {/* Info */}
             <div className="mt-8 text-center">
               <p className="text-[8px] md:text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2 font-semibold">
                 {product.category}
               </p>
               <h3 className="text-[11px] md:text-[14px] font-medium text-stone-800 tracking-widest uppercase mb-1.5 leading-snug group-hover:text-stone-500 transition-colors">
-                {product.name}
+                {product.title}
               </h3>
               <p className="text-xs md:text-sm font-light text-stone-500 font-serif italic">
-                {product.price}
+                R{product.price.toLocaleString()}
               </p>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <div className="mt-20 flex justify-center">
         <button className="px-14 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-black transition-all duration-500 flex items-center gap-3 group">
           Explore All Products

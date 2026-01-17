@@ -1,16 +1,22 @@
-import React from "react";
-import { X, ShoppingBag, Shield } from "lucide-react";
+import React, { useState } from "react";
+import { X, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "./CartContext";
 
 const ProductModal = () => {
   const { selectedProduct, closeQuickView, addToCart } = useCart();
 
+  // Track which image is currently shown
+  const [activeIndex, setActiveIndex] = useState(0);
+
   if (!selectedProduct) return null;
+
+  const images = selectedProduct.images || [];
 
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-4 min-h-screen">
+
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -20,14 +26,14 @@ const ProductModal = () => {
           className="absolute inset-0 bg-stone-900/60 backdrop-blur-md"
         />
 
-        {/* Modal Container */}
+        {/* Modal */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           className="relative w-full h-full md:h-auto md:max-w-5xl bg-white shadow-2xl overflow-y-auto md:overflow-hidden flex flex-col md:flex-row md:max-h-[90vh] rounded-t-[20rem]"
         >
-          {/* Close Button - Fixed on mobile for accessibility */}
+          {/* Close Button */}
           <button 
             onClick={closeQuickView} 
             className="fixed md:absolute top-4 right-4 z-50 p-3 bg-white/80 backdrop-blur-sm md:bg-transparent hover:bg-stone-100 rounded-full transition-colors"
@@ -35,33 +41,61 @@ const ProductModal = () => {
             <X className="w-5 h-5 text-stone-900" />
           </button>
 
-          {/* Left Side: Image - Full width on mobile, half on desktop */}
-          <div className="w-full md:w-1/2 min-h-[40vh] md:min-h-0 bg-stone-100">
-            <img 
-              src={selectedProduct.image} 
-              alt={selectedProduct.name} 
-              className="w-full h-full object-cover" 
+          {/* LEFT: Image Gallery */}
+          <div className="w-full md:w-1/2 bg-stone-100 flex flex-col">
+
+            {/* Main Image */}
+            <motion.img
+              key={activeIndex} 
+              src={images[activeIndex]}
+              alt={selectedProduct.title}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="w-full h-[60vh] md:h-full object-cover"
             />
+
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-3 p-4 overflow-x-auto bg-white border-t">
+                {images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveIndex(index)}
+                    className={`relative w-20 h-24 rounded overflow-hidden border 
+                      ${activeIndex === index ? "border-stone-900" : "border-transparent"}`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${selectedProduct.title} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Right Side: Content - Scrollable on mobile, centered on desktop */}
+          {/* RIGHT: Product Info */}
           <div className="w-full md:w-1/2 p-6 md:p-16 flex flex-col justify-center bg-white">
             <div className="space-y-2">
               <span className="text-[10px] tracking-[0.4em] text-stone-400 uppercase font-bold block">
                 {selectedProduct.category}
               </span>
+
               <h2 className="text-3xl md:text-4xl font-serif text-stone-900 leading-tight">
-                {selectedProduct.name}
+                {selectedProduct.title}
               </h2>
+
               <p className="text-xl font-light text-stone-600 italic">
-                {selectedProduct.price}
+                R{selectedProduct.price?.toLocaleString()}
               </p>
             </div>
-            
+
             <div className="w-12 h-px bg-stone-200 my-6 md:my-8" />
 
             <p className="text-stone-500 leading-relaxed font-light text-sm md:text-base italic">
-              {selectedProduct.description || "A masterwork of sustainable luxury, designed for the intentional wardrobe."}
+              {selectedProduct.description}
             </p>
 
             <div className="mt-8 md:mt-12 space-y-4">
@@ -73,7 +107,6 @@ const ProductModal = () => {
               </button>
             </div>
 
-            {/* Extra padding for mobile scroll-to-bottom room */}
             <div className="h-8 md:hidden" />
           </div>
         </motion.div>

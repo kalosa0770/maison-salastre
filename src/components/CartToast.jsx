@@ -21,7 +21,10 @@ const CartToast = () => {
             </div>
             <div className="flex-1">
               <p className="text-[10px] tracking-[0.2em] uppercase font-bold">Added to Collection</p>
-              <p className="text-[11px] text-stone-400 font-serif italic truncate">{lastAdded.name}</p>
+              <p className="text-[11px] text-stone-400 font-serif italic truncate">
+                {lastAdded.title}
+              </p>
+
             </div>
           </div>
         </motion.div>
