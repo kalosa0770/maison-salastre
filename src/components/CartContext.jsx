@@ -9,21 +9,40 @@ export const CartProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // New: Universal Toast Configuration
+  const [toastConfig, setToastConfig] = useState({
+    title: "Added to Collection",
+    message: "",
+    type: "success" // 'success', 'error', or 'admin'
+  });
+
+  // Function to trigger toast for any purpose (Admin or Cart)
+  const triggerToast = (title, message, type = "success") => {
+    setToastConfig({ title, message, type });
+    setShowToast(true);
+  };
+
   const openQuickView = (product) => setSelectedProduct(product);
   const closeQuickView = () => setSelectedProduct(null);
   const toggleCart = () => setIsCartOpen((prev) => !prev);
 
+  const cartCount = cartItems.length;
+  const cartTotal = cartItems.reduce((acc, item) => acc + (item.price || 0), 0);
+
   const addToCart = (product) => {
-    setCartItems((prev) => [...prev, { ...product, cartId: Date.now() }]);
+    const newItem = { ...product, cartId: `cart-${Date.now()}-${Math.random()}` };
+    setCartItems((prev) => [...prev, newItem]);
+    
+    // Set config for shopper toast
     setLastAdded(product);
-    setShowToast(true);
-    // When adding, we close the detail view and open the cart
+    triggerToast("Added to Collection", product.title, "success");
+    
     setSelectedProduct(null);
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id && item.cartId !== id));
+  const removeFromCart = (cartId) => {
+    setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
   };
 
   useEffect(() => {
@@ -35,8 +54,10 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider value={{ 
-      cartItems, addToCart, removeFromCart, cartCount: cartItems.length,
-      showToast, setShowToast, lastAdded, isCartOpen, toggleCart,
+      cartItems, cartTotal, cartCount,
+      addToCart, removeFromCart, 
+      showToast, setShowToast, toastConfig, triggerToast,
+      lastAdded, isCartOpen, setIsCartOpen, toggleCart,
       selectedProduct, openQuickView, closeQuickView
     }}>
       {children}

@@ -1,99 +1,113 @@
 import React, { useEffect, useState } from "react";
 import { ProductAPI } from "../../api/product.api.js";
-import AdminSection from "./AdminSection";
+import AdminSection from "./AdminSection.jsx";
+import { useCart } from "../CartContext";
+// Import your modal components
 import AdminEditProduct from "./AdminEditProduct";
 import AdminDeleteModal from "./AdminDeleteModal";
 
 const AdminDashboardProducts = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { triggerToast } = useCart();
 
-  const [editProduct, setEditProduct] = useState(null);
-  const [deleteProduct, setDeleteProduct] = useState(null);
+  // Modal States
+  const [productToEdit, setProductToEdit] = useState(null);
+  const [productToDelete, setProductToDelete] = useState(null);
 
-  const fetchProducts = async () => {
+  const fetchAll = async () => {
     try {
       setLoading(true);
       const data = await ProductAPI.getAll();
       setProducts(data);
     } catch (err) {
-      console.error(err);
-      alert("Failed to fetch products");
+      triggerToast("Sync Error", "Failed to load boutique collections", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  const handleDeleteConfirm = async () => {
     try {
-      await ProductAPI.delete(id);
-      setProducts((prev) => prev.filter((p) => p._id !== id));
+      await ProductAPI.delete(productToDelete._id);
+      triggerToast("Success", "Product removed from atelier", "success");
+      setProductToDelete(null);
+      fetchAll(); // Refresh list
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete product.");
+      triggerToast("Error", "Failed to delete piece", "error");
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  if (loading && products.length === 0) {
+    return <div className="py-20 text-center animate-pulse text-stone-400 uppercase tracking-widest text-xs">Synchronizing Atelier...</div>;
+  }
 
-  if (loading) return <p className="text-center py-10">Loading products...</p>;
-
-  if (products.length === 0)
-    return <p className="text-center py-10 text-stone-500">No products uploaded yet.</p>;
-
-  const featured = products.filter((p) => p.isFeatured);
-  const trending = products.filter((p) => p.isTrending);
-  const others = products.filter((p) => !p.isFeatured && !p.isTrending);
+  // Grouping Logic
+  // Ensure your backend returns these boolean flags (isSpotlight, isNewArrival, etc.)
+  const spotlightProducts = products.filter(p => p.isSpotlight);
+  const trendingProducts = products.filter(p => p.isTrending);
+  const newArrivals = products.filter(p => p.isNewArrival); 
+  const featuredPieces = products.filter(p => p.isFeatured);
 
   return (
-    <div className="space-y-20">
+    <div className="space-y-20 pb-20">
       <AdminSection 
-        title="Featured Products" 
-        products={featured} 
-        handleDelete={handleDelete}
-        setEditProduct={setEditProduct}
-        setDeleteProduct={setDeleteProduct}
+        title="Top Selections (Spotlight)" 
+        products={spotlightProducts} 
+        setEditProduct={setProductToEdit}
+        setDeleteProduct={setProductToDelete}
       />
 
       <AdminSection 
-        title="Trending Products" 
-        products={trending} 
-        handleDelete={handleDelete}
-        setEditProduct={setEditProduct}
-        setDeleteProduct={setDeleteProduct}
+        title="New Arrivals" 
+        products={newArrivals} 
+        setEditProduct={setProductToEdit}
+        setDeleteProduct={setProductToDelete}
       />
 
       <AdminSection 
-        title="All Products" 
-        products={others} 
-        handleDelete={handleDelete}
-        setEditProduct={setEditProduct}
-        setDeleteProduct={setDeleteProduct}
+        title="Trending Pieces" 
+        products={trendingProducts} 
+        setEditProduct={setProductToEdit}
+        setDeleteProduct={setProductToDelete}
       />
 
-      {/* Edit Modal */}
-      {editProduct && (
-        <AdminEditProduct
-          product={editProduct}
-          onClose={() => setEditProduct(null)}
-          onUpdated={fetchProducts}
+      <AdminSection 
+        title="Featured Archives" 
+        products={featuredPieces} 
+        setEditProduct={setProductToEdit}
+        setDeleteProduct={setProductToDelete}
+      />
+      
+      <AdminSection 
+        title="Total Inventory" 
+        products={products} 
+        setEditProduct={setProductToEdit}
+        setDeleteProduct={setProductToDelete}
+      />
+
+      {/* Modals */}
+      {productToEdit && (
+        <AdminEditProduct 
+          product={productToEdit} 
+          onClose={() => setProductToEdit(null)} 
+          onUpdated={() => {
+            fetchAll();
+            triggerToast("Success", "Collection updated", "success");
+          }} 
         />
       )}
 
-      {/* Delete Modal */}
-      {deleteProduct && (
-        <AdminDeleteModal
-          open={true}
-          product={deleteProduct}
-          onClose={() => setDeleteProduct(null)}
-          onConfirm={() => {
-            handleDelete(deleteProduct._id);
-            setDeleteProduct(null);
-          }}
-        />
-      )}
+      <AdminDeleteModal 
+        open={!!productToDelete} 
+        product={productToDelete}
+        onClose={() => setProductToDelete(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 };

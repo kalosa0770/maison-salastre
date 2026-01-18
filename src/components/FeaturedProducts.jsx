@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowRight, Eye } from "lucide-react";
+import { ArrowRight, Eye, MoveRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCart } from "./CartContext";
 import { ProductAPI } from "../api/product.api.js";
@@ -20,78 +20,113 @@ const FeaturedProducts = () => {
         setLoading(false);
       }
     };
-
     fetchFeatured();
   }, []);
 
-  if (loading) return <div className="text-center py-16">Loading featured products...</div>;
-  if (featured.length === 0) return <div className="text-center py-16">No featured products found.</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center">
+      <div className="w-8 h-8 border-t-2 border-stone-900 rounded-full animate-spin" />
+    </div>
+  );
+
+  if (featured.length === 0) return null;
 
   return (
-    <section className="w-full" id="featured-products">
+    <section className="max-w-[1440px] mx-auto px-6" id="featured-products">
       {/* Section Header */}
-      <div className="flex flex-col items-center mb-16 md:mb-24 text-center">
-        <span className="text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold mb-4 block">
-          The Essential List
-        </span>
-        <h2 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
-          Featured <span className="italic font-light">Products</span>
-        </h2>
-        <div className="w-10 h-px bg-stone-300 mt-8" />
+      <div className="flex flex-col items-center mb-5 md:mb-12">
+        <motion.span 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-[10px] tracking-[0.6em] text-stone-400 uppercase font-bold mb-6 block"
+        >
+          Selected Works
+        </motion.span>
+        <motion.h2 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-5xl md:text-7xl font-serif text-stone-900 tracking-tight leading-[1.1]"
+        >
+          Featured <span className="italic font-light text-stone-500">Curations</span>
+        </motion.h2>
+        <motion.div 
+          initial={{ width: 0 }}
+          whileInView={{ width: "40px" }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="h-px bg-stone-300 mt-10" 
+        />
       </div>
 
       {/* GRID */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-x-10 gap-y-20">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-24">
         {featured.map((product, index) => (
           <motion.div 
             key={product._id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.8 }}
-            className="group cursor-pointer"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: index * 0.1, duration: 1, ease: [0.21, 0.45, 0.32, 0.9] }}
+            className="group relative"
             onClick={() => openQuickView(product)}
           >
-            {/* Image */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-stone-100 rounded-t-full transition-all duration-700 group-hover:shadow-lg">
+            {/* The "Maison" House Card */}
+            <div className="relative aspect-[4/6] overflow-hidden rounded-t-[250px] border border-stone-100 bg-stone-50 transition-all duration-700 ease-in-out group-hover:border-stone-200">
+              
+              {/* Image with subtle zoom and pan */}
               <img
                 src={product.images?.[0]}
                 alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 grayscale-[15%] group-hover:grayscale-0"
+                className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110"
               />
 
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-4 md:p-6">
-                <div className="bg-white/95 backdrop-blur-sm text-stone-900 py-3.5 px-6 text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold flex items-center justify-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                  <Eye className="w-4 h-4" />
-                  View Collection
+              {/* Sophisticated Hover Overlay */}
+              <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-700">
+                <div className="absolute inset-x-0 bottom-10 flex justify-center translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                  <div className="bg-white/90 backdrop-blur-md text-stone-900 py-4 px-8 text-[10px] uppercase tracking-[0.3em] font-bold flex items-center gap-3 shadow-2xl">
+                    Quick View
+                    <MoveRight className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Info */}
-            <div className="mt-8 text-center">
-              <p className="text-[8px] md:text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2 font-semibold">
+            {/* Content Area */}
+            <div className="mt-10 px-4 text-center">
+              <span className="text-[9px] tracking-[0.4em] text-stone-400 uppercase mb-3 block font-semibold">
                 {product.category}
-              </p>
-              <h3 className="text-[11px] md:text-[14px] font-medium text-stone-800 tracking-widest uppercase mb-1.5 leading-snug group-hover:text-stone-500 transition-colors">
+              </span>
+              <h3 className="text-lg md:text-xl font-serif text-stone-800 tracking-wide mb-2">
                 {product.title}
               </h3>
-              <p className="text-xs md:text-sm font-light text-stone-500 font-serif italic">
-                R{product.price.toLocaleString()}
-              </p>
+              <div className="flex items-center justify-center gap-3">
+                <span className="h-px w-4 bg-stone-200" />
+                <p className="text-sm font-light text-stone-500 italic">
+                  R {product.price.toLocaleString()}
+                </p>
+                <span className="h-px w-4 bg-stone-200" />
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="mt-20 flex justify-center">
-        <button className="px-14 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-black transition-all duration-500 flex items-center gap-3 group">
-          Explore All Products
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      {/* Footer CTA */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-32 flex flex-col items-center"
+      >
+        <button className="group flex flex-col items-center gap-4 transition-all duration-300">
+          <div className="relative p-6 rounded-full border border-stone-200 group-hover:border-stone-900 group-hover:bg-stone-900 transition-all duration-500">
+            <ArrowRight className="w-6 h-6 text-stone-900 group-hover:text-white transition-colors" />
+          </div>
+          <span className="text-[11px] uppercase tracking-[0.5em] font-bold text-stone-400 group-hover:text-stone-900">
+            View All Series
+          </span>
         </button>
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -1,115 +1,117 @@
-import React from "react";
-import { MoveUpRight, ArrowRight, Eye } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { MoveUpRight, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCart } from "./CartContext"; 
-
-const selections = [
-  {
-    id: "s1",
-    name: "The Sculpted Trench",
-    price: "$1,450",
-    subtitle: "Edition 001",
-    category: "Outerwear",
-    image: "https://images.unsplash.com/photo-1585435465945-bef5a93f8849?auto=format&fit=crop&w=1200&q=80",
-    description: "A masterclass in tailoring. This trench features a heavy-weight twill that holds its architectural shape through every movement."
-  },
-  {
-    id: "s2",
-    name: "Minimalist Silk Slip",
-    price: "$890",
-    subtitle: "Pure Mulberry",
-    category: "Evening Wear",
-    image: "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=80",
-    description: "Fluid silk that mirrors the body's silhouette. Double-lined for a seamless, opaque finish."
-  },
-  {
-    id: "s3",
-    name: "Pleated Artisan Trousers",
-    price: "$520",
-    subtitle: "Hand-Finished",
-    category: "Tailoring",
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=900&q=80",
-    description: "Relaxed yet refined. These trousers feature deep knife pleats and a hidden adjustable waistband for the perfect fit."
-  },
-  {
-    id: "s4",
-    name: "Structured Crepe Blazer",
-    price: "$980",
-    subtitle: "Limited Cut",
-    category: "Outerwear",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=80",
-    description: "Sharp shoulders and a nipped waist. This blazer is the cornerstone of the modern consequential wardrobe."
-  },
-];
+import { ProductAPI } from "../api/product.api";
 
 const TopSelections = () => {
-  const { openQuickView } = useCart(); // Access the view logic
+  const { openQuickView } = useCart();
+  const [selections, setSelections] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        // Calls the new jumbo 'top-selections' controller
+        const jumboData = await ProductAPI.getTopSelections();
+        setSelections(jumboData || []);
+      } catch (error) {
+        console.error("Error fetching top selections:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  if (loading) return (
+    <div className="py-24 text-center">
+      <div className="inline-block w-8 h-8 border-2 border-stone-200 border-t-stone-900 rounded-full animate-spin" />
+    </div>
+  );
+
+  // If the admin hasn't highlighted any products yet, we hide the section
+  if (selections.length === 0) return null;
 
   return (
-    <section className="w-full" id="top-selections">
+    <section className="w-full px-6 py-24 md:py-32 bg-[#fafafa]" id="top-selections">
+      {/* Header */}
       <div className="flex flex-col items-center mb-16 md:mb-24 text-center">
-        <span className="text-[10px] tracking-[0.5em] uppercase text-stone-400 mb-4 block font-bold">
-          Curated Excellence
-        </span>
+        <motion.span 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="text-[10px] tracking-[0.5em] uppercase text-stone-400 mb-4 block font-bold"
+        >
+          The Jumbo Edit
+        </motion.span>
         <h2 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
-          Top <span className="italic font-light">Selections</span>
+          Top <span className="italic font-light text-stone-500">Selections</span>
         </h2>
-        <div className="w-10 h-px bg-stone-300 mt-8" />
+        <div className="w-12 h-px bg-stone-200 mt-8" />
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-8">
+      {/* Grid - Staggered Layout */}
+      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16 md:gap-x-12">
         {selections.map((item, index) => (
           <motion.div 
-            key={item.id} 
-            initial={{ opacity: 0, y: 30 }}
+            key={item._id} 
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.8 }}
-            onClick={() => openQuickView(item)} // Open view on card click
-            className={`group cursor-pointer ${index % 2 !== 0 ? 'lg:mt-12' : ''}`}
+            transition={{ delay: index * 0.15, duration: 0.9, ease: [0.215, 0.61, 0.355, 1] }}
+            onClick={() => openQuickView(item)}
+            // Stagger logic: pushes every second item down on desktop
+            className={`group cursor-pointer ${index % 2 !== 0 ? 'lg:mt-20' : ''}`}
           >
-            <div className="relative aspect-[2/3] md:aspect-[3/4] overflow-hidden rounded-t-full bg-stone-100 border border-stone-200/50">
+            {/* The Arched Container */}
+            <div className="relative aspect-[3/4.5] overflow-hidden rounded-t-full bg-white border border-stone-100 shadow-sm transition-all duration-700 group-hover:shadow-2xl">
               <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-full object-cover transition-transform duration-[1.8s] ease-out group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0"
+                src={item.images?.[0]}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0"
               />
 
-              {/* REFINED: View Details Overlay */}
-              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 md:p-8">
-                <button 
-                  className="w-full bg-white text-stone-900 py-3 md:py-4 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl"
+              {/* Interaction Overlay */}
+              <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                <div 
+                  className="w-full bg-white/95 backdrop-blur-sm text-stone-900 py-4 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-sm"
                 >
                   View Details <MoveUpRight className="w-3.5 h-3.5" />
-                </button>
+                </div>
               </div>
             </div>
 
-            <div className="mt-8 px-1 text-center lg:text-left">
-              <p className="text-[8px] md:text-[9px] tracking-[0.3em] text-stone-400 uppercase mb-2 font-semibold">
-                {item.subtitle}
-              </p>
-              <h3 className="text-xs md:text-[14px] font-medium text-stone-800 tracking-widest uppercase mb-1 leading-snug group-hover:text-stone-500 transition-colors">
-                {item.name}
+            {/* Typography */}
+            <div className="mt-10 px-2 text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <p className="text-[8px] md:text-[9px] tracking-[0.4em] text-stone-400 uppercase font-bold">
+                  {item.category}
+                </p>
+                {/* Visual indicator if it's the Spotlight piece */}
+                {item.isSpotlight && <span className="w-1 h-1 rounded-full bg-amber-400" />}
+              </div>
+              <h3 className="text-xs md:text-[13px] font-medium text-stone-800 tracking-[0.15em] uppercase mb-2 leading-snug group-hover:text-stone-500 transition-colors">
+                {item.title}
               </h3>
-              <p className="text-[10px] md:text-xs font-serif italic text-stone-500">
-                {item.price}
+              <p className="text-sm font-serif italic text-stone-900">
+                R{item.price?.toLocaleString()}
               </p>
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="mt-20 md:mt-32 flex justify-center">
+      {/* Navigation CTA */}
+      <div className="mt-32 flex justify-center">
         <motion.button 
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="group relative px-12 py-5 bg-stone-900 text-white text-[10px] uppercase tracking-[0.4em] font-bold overflow-hidden"
+          whileHover={{ y: -2 }}
+          className="group flex items-center gap-8 px-2 py-2 border-b border-stone-200 hover:border-stone-900 transition-all duration-500"
         >
-          <span className="relative z-10 flex items-center gap-3">
-            View All Selections <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <span className="text-[10px] uppercase tracking-[0.6em] font-bold text-stone-500 group-hover:text-stone-900 transition-colors">
+            Explore Full Boutique
           </span>
-          <div className="absolute inset-0 bg-stone-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+          <ArrowRight className="w-4 h-4 text-stone-300 group-hover:text-stone-900 group-hover:translate-x-2 transition-all" />
         </motion.button>
       </div>
     </section>

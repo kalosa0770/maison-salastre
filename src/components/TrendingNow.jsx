@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Eye } from "lucide-react";
+import { ArrowUpRight, Eye, MoveRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCart } from "./CartContext";
 import { ProductAPI } from "../api/product.api";
@@ -20,86 +20,101 @@ const TrendingNow = () => {
         setLoading(false);
       }
     };
-
     fetchTrending();
   }, []);
 
-  if (loading) return <div className="text-center py-16">Loading trending products...</div>;
-  if (trending.length === 0) return <div className="text-center py-16">No trending products found.</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center">
+       <div className="w-6 h-6 border-t border-stone-900 rounded-full animate-spin" />
+    </div>
+  );
+  
+  if (trending.length === 0) return null;
 
   return (
-    <div className="w-full" id="trending-now">
+    <section className="max-w-[1440px] mx-auto px-6" id="trending-now">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-        <div className="space-y-2">
-          <span className="text-[10px] tracking-[0.4em] uppercase text-stone-400 block font-bold">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 border-b border-stone-100 pb-12">
+        <div className="space-y-4">
+          <motion.span 
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="text-[10px] tracking-[0.5em] uppercase text-stone-400 block font-bold"
+          >
             The Current Pulse
-          </span>
-          <h2 className="text-3xl md:text-5xl font-serif text-stone-900 tracking-tight">
-            Trending <span className="italic">Now</span>
+          </motion.span>
+          <h2 className="text-4xl md:text-6xl font-serif text-stone-900 tracking-tight">
+            Trending <span className="italic font-light text-stone-500">Now</span>
           </h2>
         </div>
 
-        <button className="text-[10px] uppercase tracking-[0.3em] text-stone-600 hover:text-black font-bold flex items-center gap-2 transition-all duration-300 border-b border-transparent hover:border-black pb-1 group">
-          View Popular Products
-          <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </button>
+        <motion.button 
+          whileHover={{ x: 5 }}
+          className="text-[10px] uppercase tracking-[0.4em] text-stone-800 font-bold flex items-center gap-3 transition-all duration-300 group"
+        >
+          View Popular Series
+          <MoveRight className="w-5 h-5 text-stone-300 group-hover:text-stone-900 transition-colors" />
+        </motion.button>
       </div>
 
-      {/* GRID — 2 columns on mobile, 4 on desktop */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-x-10 gap-y-20">
+      {/* GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
         {trending.map((product, index) => (
           <motion.div
             key={product._id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.6 }}
+            transition={{ delay: index * 0.1, duration: 0.8, ease: "easeOut" }}
             className="group cursor-pointer"
             onClick={() => openQuickView(product)}
           >
-            {/* Image Container */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-stone-50 rounded-t-full transition-all duration-[0.8s] ease-in-out group-hover:rounded-t-lg shadow-sm">
+            {/* Morphing House Container */}
+            <div className="relative aspect-[3/4.5] overflow-hidden bg-stone-50 transition-all duration-[1s] ease-in-out rounded-t-[180px] group-hover:rounded-t-[40px] shadow-sm group-hover:shadow-xl">
               <img
                 src={product.images?.[0]}
                 alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0"
               />
 
-              {/* Trending Badge */}
-              <div className="absolute top-6 left-6">
-                <span className="bg-white/90 backdrop-blur-md text-[8px] tracking-[0.2em] uppercase px-3 py-1.5 text-stone-900 font-bold border border-stone-200">
-                  Popular
+              {/* Status Badge */}
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 opacity-100 group-hover:opacity-0 transition-opacity duration-500">
+                <span className="bg-white/80 backdrop-blur-sm text-[8px] tracking-[0.3em] uppercase px-4 py-2 text-stone-900 font-bold border border-stone-100 whitespace-nowrap">
+                  Most Coveted
                 </span>
               </div>
 
-              {/* View Detail Overlay */}
-              <div className="absolute inset-0 bg-stone-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center p-4">
-                <button className="bg-white/95 backdrop-blur-sm py-4 px-6 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center gap-2 hover:bg-stone-900 hover:text-white transition-all duration-300 shadow-xl">
+              {/* Sophisticated Action Overlay */}
+              <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col items-center justify-end p-10">
+                <div className="bg-white text-stone-900 w-full py-4 text-[9px] uppercase tracking-[0.3em] font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl">
                   <Eye className="w-3.5 h-3.5" />
-                  View Detail
-                </button>
+                  Quick View
+                </div>
               </div>
             </div>
 
-            {/* Product Metadata */}
-            <div className="mt-6">
-              <div className="flex justify-between items-start mb-1.5">
-                <p className="text-[8px] md:text-[9px] tracking-[0.2em] text-stone-400 uppercase font-bold">
+            {/* Metadata Section */}
+            <div className="mt-8 space-y-3 px-2">
+              <div className="flex flex-col justify-between items-center">
+                <p className="text-[9px] tracking-[0.3em] text-stone-400 uppercase font-bold">
                   {product.category}
                 </p>
-                <span className="text-[11px] md:text-sm font-light text-stone-800 font-serif italic">
-                  R{product.price?.toLocaleString()}
+                <div className="h-px flex-1 mx-4 bg-stone-100" />
+              </div>
+              
+              <div className="flex flex-col justify-center text-center items-center gap-4">
+                <h3 className="text-xs md:text-sm font-medium text-stone-800 tracking-widest uppercase transition-colors group-hover:text-stone-400">
+                  {product.title}
+                </h3>
+                <span className="text-sm font-light text-stone-900">
+                  R {product.price?.toLocaleString()}
                 </span>
               </div>
-              <h3 className="text-[11px] md:text-[13px] font-medium text-stone-900 tracking-widest uppercase leading-tight group-hover:text-stone-500 transition-colors">
-                {product.title}
-              </h3>
             </div>
           </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
