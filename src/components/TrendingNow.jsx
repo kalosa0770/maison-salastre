@@ -58,7 +58,7 @@ const TrendingNow = () => {
       </div>
 
       {/* GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
         {trending.map((product, index) => (
           <motion.div
             key={product._id}
@@ -95,15 +95,15 @@ const TrendingNow = () => {
 
             {/* Metadata Section */}
             <div className="mt-8 space-y-3 px-2">
-              <div className="flex flex-col justify-between items-center">
+              <div className="flex flex-col justify-between">
                 <p className="text-[9px] tracking-[0.3em] text-stone-400 uppercase font-bold">
                   {product.category}
                 </p>
                 <div className="h-px flex-1 mx-4 bg-stone-100" />
               </div>
               
-              <div className="flex flex-col justify-center text-center items-center gap-4">
-                <h3 className="text-xs md:text-sm font-medium text-stone-800 tracking-widest uppercase transition-colors group-hover:text-stone-400">
+              <div className="flex flex-col text-start gap-4">
+                <h3 className="text-[9px] md:text-sm font-medium text-stone-800 tracking-widest uppercase transition-colors group-hover:text-stone-400">
                   {product.title}
                 </h3>
                 <span className="text-sm font-light text-stone-900">

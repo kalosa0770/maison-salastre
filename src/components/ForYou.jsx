@@ -79,7 +79,7 @@ const ForYou = () => {
             <span className="text-[10px] tracking-[0.5em] text-stone-400 uppercase font-bold mb-4 block">
               {product.category}
             </span>
-            <h2 className="text-5xl md:text-7xl font-serif leading-[1.1] text-stone-900">
+            <h2 className="text-xl md:text-4xl font-serif leading-[1.1] text-stone-900">
               {product.title.split(' ').slice(0, -1).join(' ')} <br />
               <span className="italic font-light text-stone-500">{product.title.split(' ').pop()}</span>
             </h2>
@@ -90,10 +90,7 @@ const ForYou = () => {
           </p>
 
           <div className="flex items-baseline gap-6 border-b border-stone-100 pb-8">
-            <span className="text-4xl font-light text-stone-900">R {product.price?.toLocaleString()}</span>
-            <span className="text-[9px] tracking-[0.2em] text-stone-400 uppercase font-bold">
-              Includes Bespoke Consultation
-            </span>
+            <span className="text-4xl font-light text-stone-900">R{product.price?.toLocaleString()}</span>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">

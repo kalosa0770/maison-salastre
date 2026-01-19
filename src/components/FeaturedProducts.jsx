@@ -92,14 +92,14 @@ const FeaturedProducts = () => {
             </div>
 
             {/* Content Area */}
-            <div className="mt-10 px-4 text-center">
+            <div className="mt-10 px-4 text-start">
               <span className="text-[9px] tracking-[0.4em] text-stone-400 uppercase mb-3 block font-semibold">
                 {product.category}
               </span>
-              <h3 className="text-lg md:text-xl font-serif text-stone-800 tracking-wide mb-2">
+              <h3 className="text-[9px] md:text-xl font-serif text-stone-800 tracking-wide mb-2">
                 {product.title}
               </h3>
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex gap-3">
                 <span className="h-px w-4 bg-stone-200" />
                 <p className="text-sm font-light text-stone-500 italic">
                   R {product.price.toLocaleString()}

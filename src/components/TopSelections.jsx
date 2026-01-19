@@ -83,15 +83,15 @@ const TopSelections = () => {
             </div>
 
             {/* Typography */}
-            <div className="mt-10 px-2 text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="mt-10 px-2 text-start">
+              <div className="flex gap-2 mb-2">
                 <p className="text-[8px] md:text-[9px] tracking-[0.4em] text-stone-400 uppercase font-bold">
                   {item.category}
                 </p>
                 {/* Visual indicator if it's the Spotlight piece */}
                 {item.isSpotlight && <span className="w-1 h-1 rounded-full bg-amber-400" />}
               </div>
-              <h3 className="text-xs md:text-[13px] font-medium text-stone-800 tracking-[0.15em] uppercase mb-2 leading-snug group-hover:text-stone-500 transition-colors">
+              <h3 className="text-[9px] md:text-[13px] font-medium text-stone-800 tracking-[0.15em] uppercase mb-2 leading-snug group-hover:text-stone-500 transition-colors">
                 {item.title}
               </h3>
               <p className="text-sm font-serif italic text-stone-900">
